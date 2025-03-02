@@ -151,3 +151,74 @@ Order Paid
 
 Additional receipt formats can be supported by implementing new parser classes that conform to the `ReceiptParser` protocol.
 ```
+
+```SAN MARINO
+
+Dundrum
+
+Placed: 20.02.2025, 17:31:26
+
+Accepted: 20.02.2025, 17:31:40
+
+11 Grange Wood
+
+Rathfarnha
+
++353879188373
+
+1x Chicken Burger Chips and Sauce
+
+: 8.50.
+
+Mayonaise
+
+1x 12" Margherita & Drink Fanta (can)
+
+€ 10.70
+
+1x Garlic Chips & Cheese
+
+€ 6.40
+
+1x Chicken Wings
+
+6.90
+
+1x 4 Chicken Tenders
+
+€ 4.50
+
+1x Sausage Meal Diet Coke (Can)
+
+€ 9.00
+
+1x Oreo Milkshake
+
+€ 4.20
+
+1x Vanila Milkshake
+
+€ 3.90
+
+2x Cans
+
+€ 4.00
+
+Type: Diet Coke
+
+Subtotal:
+
+€ 58.10
+
+Delivery:
+
+€ 3.00
+
+Total:
+
+€ 61.10
+
+Payment: Paid
+
+Signed By
+```
