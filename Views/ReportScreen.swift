@@ -121,10 +121,8 @@ struct ReportScreen: View {
     
     // Helper to format the date
     private func formatDate(_ date: SimpleDate) -> String {
-        if let dateObj = date.toDate() {
-            return dateFormatter.string(from: dateObj)
-        }
-        return date.toString()
+        let dateObj = date.toDate()
+        return dateFormatter.string(from: dateObj)
     }
     
     // Computed property to get entries for the selected date
