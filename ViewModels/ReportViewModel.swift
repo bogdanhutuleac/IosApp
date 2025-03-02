@@ -149,8 +149,8 @@ class ReportViewModel: ObservableObject {
     
     func goToPreviousDay() {
         let calendar = Calendar.current
-        if let date = selectedDate.toDate(),
-           let previousDay = calendar.date(byAdding: .day, value: -1, to: date) {
+        let date = selectedDate.toDate()
+        if let previousDay = calendar.date(byAdding: .day, value: -1, to: date) {
             selectedDate = SimpleDate.fromDate(previousDay)
             updateCalculations()
         }
@@ -158,8 +158,8 @@ class ReportViewModel: ObservableObject {
     
     func goToNextDay() {
         let calendar = Calendar.current
-        if let date = selectedDate.toDate(),
-           let nextDay = calendar.date(byAdding: .day, value: 1, to: date) {
+        let date = selectedDate.toDate()
+        if let nextDay = calendar.date(byAdding: .day, value: 1, to: date) {
             selectedDate = SimpleDate.fromDate(nextDay)
             updateCalculations()
         }
