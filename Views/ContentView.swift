@@ -4,8 +4,18 @@ struct ContentView: View {
     @StateObject private var viewModel = ReportViewModel()
     
     var body: some View {
-        ReportScreen()
-            .environmentObject(viewModel)
+        TabView {
+            ReportScreen()
+                .tabItem {
+                    Label("Home", systemImage: "house")
+                }
+            
+            AllReceiptsView()
+                .tabItem {
+                    Label("Receipts", systemImage: "list.bullet.rectangle")
+                }
+        }
+        .environmentObject(viewModel)
     }
 }
 
