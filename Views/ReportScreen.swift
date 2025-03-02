@@ -80,7 +80,9 @@ struct ReportScreen: View {
                 // Entries list
                 List {
                     ForEach(entriesForSelectedDate) { entry in
-                        EntryRow(entry: entry, currencyFormatter: currencyFormatter)
+                        NavigationLink(destination: ReceiptDetailView(entry: entry)) {
+                            EntryRow(entry: entry, currencyFormatter: currencyFormatter)
+                        }
                     }
                 }
                 .listStyle(PlainListStyle())
