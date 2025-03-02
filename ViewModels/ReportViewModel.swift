@@ -27,12 +27,62 @@ class ReportViewModel: ObservableObject {
     init() {
         // Initialize parsers
         parsers = [
+            SanMarinoParser(),
             JustEats2Parser(defaultPhoneNumber: "014832993")
             // Add other parsers as needed
         ]
         
         // Set up clipboard monitoring
         setupClipboardMonitoring()
+        
+        // Add some sample data for testing
+        addSampleData()
+    }
+    
+    // Add sample data for testing
+    private func addSampleData() {
+        #if DEBUG
+        let sampleEntry1 = ClipboardEntry(
+            content: "Sample JustEats receipt",
+            deliveryAddress: "123 Test Street, Dublin",
+            subtotal: 18.99,
+            total: 23.87,
+            isPaid: true,
+            phoneNumber: "014832993",
+            maskingCode: "123456"
+        )
+        
+        let sampleEntry2 = ClipboardEntry(
+            content: "Sample San Marino receipt",
+            deliveryAddress: "456 Demo Road, Dublin",
+            subtotal: 28.50,
+            total: 31.50,
+            isPaid: false,
+            phoneNumber: "+353871234567",
+            maskingCode: ""
+        )
+        
+        // Add sample entries with different dates
+        let calendar = Calendar.current
+        if let yesterday = calendar.date(byAdding: .day, value: -1, to: Date()) {
+            let yesterdayEntry = ClipboardEntry(
+                content: "Yesterday's receipt",
+                deliveryAddress: "789 Past Lane, Dublin",
+                subtotal: 15.75,
+                total: 19.25,
+                isPaid: true,
+                phoneNumber: "014832993",
+                timestamp: yesterday
+            )
+            clipboardEntries.append(yesterdayEntry)
+        }
+        
+        clipboardEntries.append(sampleEntry1)
+        clipboardEntries.append(sampleEntry2)
+        
+        // Update calculations to reflect the sample data
+        updateCalculations()
+        #endif
     }
     
     // MARK: - Clipboard Monitoring
@@ -64,14 +114,22 @@ class ReportViewModel: ObservableObject {
     func processClipboardContent(_ content: String) {
         let lines = content.components(separatedBy: .newlines)
         
+        print("Processing clipboard content with \(lines.count) lines")
+        
         // Try each parser until one succeeds
         for parser in parsers {
             if parser.canParse(lines: lines) {
+                print("Parser \(type(of: parser)) can parse the content")
                 if let entry = parser.parse(lines: lines) {
                     // Add the entry and update calculations
+                    print("Successfully parsed entry with address: \(entry.deliveryAddress)")
                     addEntry(entry)
                     return
+                } else {
+                    print("Parser \(type(of: parser)) failed to parse the content")
                 }
+            } else {
+                print("Parser \(type(of: parser)) cannot parse the content")
             }
         }
         

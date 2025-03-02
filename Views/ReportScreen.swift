@@ -252,10 +252,190 @@ struct ClipboardInputView: View {
     @Binding var clipboardText: String
     let onSubmit: () -> Void
     @Environment(\.presentationMode) var presentationMode
+    @State private var selectedSample: Int? = nil
+    
+    // Sample receipts for easy testing
+    private let sampleReceipts = [
+        "JustEats Receipt": """
+        Delivery 133803766
+        
+        JustEats
+        
+        Due: 2025-02-26 21:50
+        
+        Delivery Station 2
+        
+        Qty
+        
+        1
+        
+        1
+        
+        Item
+        
+        Price
+        
+        Taco Chips
+        
+        €7.99
+        
+        Doner Kebab
+        
+        €8.99
+        
+        - Extra Meat
+        
+        €2.00
+        
+        Order Price
+        
+        €18.98
+        
+        Service Charges
+        
+        €0.99
+        
+        Delivery Charges
+        
+        €3.90
+        
+        Net Price
+        
+        €23.87
+        
+        Paid Amount
+        
+        €23.87
+        
+        Outstanding
+        
+        €0.00
+        
+        Customer Details
+        
+        Monika Warchala
+        
+        01 483 2993 (masking
+        
+        code) 303844006
+        
+        84 Weston Park Dublin 14 Dublin 14 D14 WD28
+        
+        Order Paid
+        """,
+        "San Marino Receipt": """
+        SAN MARINO
+        
+        Dundrum
+        
+        Placed: 20.02.2025, 17:31:26
+        
+        Accepted: 20.02.2025, 17:31:40
+        
+        11 Grange Wood
+        
+        Rathfarnha
+        
+        +353879188373
+        
+        1x Chicken Burger Chips and Sauce
+        
+        : 8.50.
+        
+        Mayonaise
+        
+        1x 12" Margherita & Drink Fanta (can)
+        
+        € 10.70
+        
+        1x Garlic Chips & Cheese
+        
+        € 6.40
+        
+        1x Chicken Wings
+        
+        6.90
+        
+        1x 4 Chicken Tenders
+        
+        € 4.50
+        
+        1x Sausage Meal Diet Coke (Can)
+        
+        € 9.00
+        
+        1x Oreo Milkshake
+        
+        € 4.20
+        
+        1x Vanila Milkshake
+        
+        € 3.90
+        
+        2x Cans
+        
+        € 4.00
+        
+        Type: Diet Coke
+        
+        Subtotal:
+        
+        € 58.10
+        
+        Delivery:
+        
+        € 3.00
+        
+        Total:
+        
+        € 61.10
+        
+        Payment: Paid
+        
+        Signed By
+        """
+    ]
     
     var body: some View {
         NavigationView {
             VStack {
+                // Sample receipt selector
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 10) {
+                        ForEach(Array(sampleReceipts.keys.enumerated()), id: \.element) { index, key in
+                            Button(action: {
+                                clipboardText = sampleReceipts[key] ?? ""
+                                selectedSample = index
+                            }) {
+                                Text(key)
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 8)
+                                    .background(selectedSample == index ? Color.blue : Color(.systemGray5))
+                                    .foregroundColor(selectedSample == index ? .white : .primary)
+                                    .cornerRadius(8)
+                            }
+                        }
+                        
+                        Button(action: {
+                            #if os(iOS)
+                            if let clipboardString = UIPasteboard.general.string {
+                                clipboardText = clipboardString
+                            }
+                            #endif
+                            selectedSample = nil
+                        }) {
+                            Text("Paste from Clipboard")
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 8)
+                                .background(selectedSample == nil ? Color.blue : Color(.systemGray5))
+                                .foregroundColor(selectedSample == nil ? .white : .primary)
+                                .cornerRadius(8)
+                        }
+                    }
+                    .padding(.horizontal)
+                }
+                .padding(.top)
+                
                 TextEditor(text: $clipboardText)
                     .padding()
                     .background(Color(.systemGray6))
@@ -273,6 +453,7 @@ struct ClipboardInputView: View {
                 }
                 .padding(.horizontal)
                 .padding(.bottom)
+                .disabled(clipboardText.isEmpty)
             }
             .navigationBarTitle("Paste Receipt", displayMode: .inline)
             .navigationBarItems(
